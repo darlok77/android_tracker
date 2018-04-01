@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -22,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
+import android.provider.Settings.Secure;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     boolean canGetLocation = true;
 
 
+    @SuppressLint("HardwareIds")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,19 +75,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
         permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-        permissions.add(Manifest.permission.READ_PHONE_STATE);
         permissions.add(Manifest.permission.INTERNET);
         permissionsToRequest = findUnAskedPermissions(permissions);
 
 
-        //ici
-        tm=(TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        assert tm != null;
-        @SuppressLint({"MissingPermission", "HardwareIds"}) String IMEINumber = tm.getDeviceId();
 
-        tv_mainActivity_phoneId.setText(IMEINumber);
+        String IMEINumber = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
         phoneId = IMEINumber;
-
+        tv_mainActivity_phoneId.setText(IMEINumber);
 
         if (!isGPS && !isNetwork) {
             Log.d(TAG, "GPS connection off");
@@ -283,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     @Override
                     public void onResponse(String response) {
                         // response
-                        Log.d("1", response);
+                        Log.d("response", response);
 
                         tv_mainActivity_response.setText(response);
                         Log.d("longitude", longitude);
