@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         latitude = Double.toString(loc.getLatitude());
 
         rq = Volley.newRequestQueue(this);
-        String url ="http://5.51.221.85:1337/track/";
+        String url ="localhost:1337/track/";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
